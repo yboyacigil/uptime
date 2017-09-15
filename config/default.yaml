@@ -5,8 +5,8 @@ mongodb:
   database: uptime
   user:     root 
   password:
-  connectionString:       # alternative to setting server, database, user and password separately
-
+  # connectionString:       # alternative to setting server, database, user and password separately
+  connectionString: mongodb://localhost/uptime-test
 monitor:
   name:                   origin
   apiUrl:                 'http://localhost:8082/api' # must be accessible without a proxy
@@ -25,6 +25,7 @@ plugins:
   - ./plugins/console
   - ./plugins/patternMatcher
   - ./plugins/httpOptions
+  - ./plugins/expectedStatus
   # - ./plugins/email
   # - ./plugins/basicAuth
 
