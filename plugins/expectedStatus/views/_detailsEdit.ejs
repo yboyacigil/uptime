@@ -1,0 +1,12 @@
+<fieldset>
+    <div class="control-group">
+      <label class="control-label">Expected status code</label>
+      <div class="controls">
+        <input type="text" name="check[statusMatch]" value="<%= check.getPollerParam('statusMatch') || '' %>" class="span8" placeholder="Uses regular expressions. Leave blank to disable pattern detection."/>
+        <span class="help-inline">
+          Works for only HTTP client error status codes (4XX). See: <a target="_blank" href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#4xx_Client_errors">HTTP
+          client errors</a> document for more details.
+        </span>
+      </div>
+    </div>
+  </fieldset>
