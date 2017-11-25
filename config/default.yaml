@@ -26,6 +26,7 @@ plugins:
   - ./plugins/patternMatcher
   - ./plugins/httpOptions
   - ./plugins/expectedStatus
+  - ./plugins/mute
   # - ./plugins/email
   # - ./plugins/basicAuth
 

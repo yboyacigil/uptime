@@ -1,0 +1,82 @@
+<h1>Mute <small id="muteOnOff" class="pull-right">ON/OFF</small></h1>
+
+<% if (info.length) { %>
+  <div class="alert alert-success"><%= info %></div>
+<% } %>
+
+<form id="mute_form" method="post" class="form-horizontal" action="<%= route %>/mute/<%= mute ? mute.name : '' %>">
+  <input type="hidden" name="_method" value="<%= mute ? 'put' : 'post' %>" />
+  <input type="hidden" name="mute[name]" value="<%= mute ? mute.name : 'global' %>" />
+  
+  <div class="panel panel-default">
+    
+    <div class="panel-heading">
+      <h3>WARNING: All checks will be muted starting given date and lasts given duration in minutes.</h3>
+    </div>
+
+    <div class="panel-body">
+      <div class="row">            
+        <div class="span6">
+          <fieldset>
+            <div class="control-group">
+              <label class="control-label">Starts</label>
+              <div class="controls controls-row">
+                <input id="muteStart" type="text" required name="mute[start]" value="<%= mute && mute.start || '' %>" class="span5"  placeholder="e.g. 2014-06-01T12:00:00Z"/>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      
+        <div class="span6">
+          <fieldset>
+            <div class="control-group">
+              <label class="control-label">Lasts</label>
+              <div class="controls controls-row">
+                  <div class="input-prepend input-append">
+                      <input id="muteLast" type="text" required name="mute[last]" value="<%= mute && mute.last || '' %>" class="span1">
+                      <span class="add-on">min</span>
+                  </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>            
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn" href="<%= route %>/events">Cancel</a>
+      </div>
+    </div>
+  </div>
+</form>  
+
+<script src="<%= route %>/javascripts/uptimeBar.js"></script>
+<script src="<%= route %>/javascripts/moment.min.js"></script>
+<script>
+jQuery(document).ready(function($) {
+  $('.navbar-inner li').eq(3).addClass('active');
+
+  var updateMutes = function(mute) {
+    var updateMutesSection = function(mute) {
+      if (mute) {
+        $('#muteStart').val(mute.start);
+        $('#muteLast').val(mute.last);
+        var m = moment(mute.start);
+        var diffInMins = m.diff(Date.now(), 'minutes');
+        if ((diffInMins + mute.last) > 0) {
+          $('#muteOnOff').html('<strong class="red">ON</strong>')
+        } else {
+          $('#muteOnOff').html('<strong class="green">OFF</strong>')
+        }
+      }
+    }
+    if (mute) {
+      updateMutesSection(mute);
+    } else {
+      $.getJSON('/api/mute/global', updateMutesSection);
+    }
+  }
+  updateMutes(<%- JSON.stringify(mute) %>);
+  window.setInterval(updateMutes, 5 * 60 * 1000); // refresh every 5 minutes to update the qos scores
+});
+</script>

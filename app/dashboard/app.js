@@ -13,6 +13,7 @@ var TagDailyStat = require('../../models/tagDailyStat');
 var TagMonthlyStat = require('../../models/tagMonthlyStat');
 var CheckMonthlyStat = require('../../models/checkMonthlyStat');
 var moduleInfo = require('../../package.json');
+var Mute = require('../../models/mute')
 
 var app = module.exports = express();
 
@@ -161,6 +162,38 @@ app.get('/tags/:name', function(req, res, next) {
     }
     if (!tag) return next(new Error('failed to load tag ' + req.params.name));
     res.render('tag', { tag: tag, req: req });
+  });
+});
+
+app.get('/mute', function(req, res, next) {
+  Mute.findOne({name: 'global'}).exec(function(err, mute) {
+    if (err) return next(err);
+    res.render('mute', { mute: mute, info: req.flash('info')});
+  });
+});
+
+app.post('/mute', function(req, res, next) {
+  var mute = new Mute();
+  var dirtyMute = req.body.mute;
+  mute.populateFromDirtyMute(dirtyMute)
+
+  mute.save(function(err) {
+    if (err) return next(err);
+    req.flash('info', 'Changes have been saved');
+    res.redirect(app.route + '/mute/');  
+  });
+});
+
+app.put('/mute/:name', function(req, res, next) {
+  Mute.findOne({ name: req.params.name}).exec(function(err, mute) {
+    if (err) return next(err);
+    var dirtyMute = req.body.mute;
+    mute.populateFromDirtyMute(dirtyMute)
+    mute.save(function(err2) {
+      if (err2) return next(err2);
+      req.flash('info', 'Changes have been saved');
+      res.redirect(app.route + '/mute/');
+    });
   });
 });
 

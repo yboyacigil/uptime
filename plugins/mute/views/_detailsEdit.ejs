@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="span6">
+        <fieldset>
+                <div class="control-group">
+                    <label class="control-label">Mute starting</label>
+                    <div class="controls">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' class="form-control" name="check[muteStart]" value="<%= check.getPollerParam('muteStart') || '' %>" placeholder="e.g. 2014-06-01T12:00:00Z"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+        </fieldset>
+    </div>
+    <div class="span6">
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label">for</label>
+                    <div class="controls">
+                        <div class="input-prepend input-append">
+                          <input type="text" name="check[muteLast]" value="<%= check.getPollerParam('muteLast') || '' %>" class="span1">
+                          <span class="add-on">min</span>
+                        </div>
+                    </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
